@@ -1,0 +1,154 @@
+#headers
+format: api-doc
+version: 1.0.0
+lang: es
+
+
+#document
+title: "Mecapp API Rest Documentation"
+hostDocumentation: https://github.com/code-cy/docfast-js
+host:  http://host.com 
+baseUrl:  /api 
+
+tags:       
+    User:
+        description: "`http://mecapp:8081/api` Operar datos del Usuario."     
+
+paths:
+    /auth/user :
+        post:
+            tags: ["User", "API"]        
+            description: Iniciar sesion como Usuario.                      
+            response:                
+                201:
+                    description: Usuario a iniciado sesion. 
+                    data:
+                        json:
+                            ref: models.UserLoginResponse                                
+    /users :        
+        post:
+            extend: types.UserRoute
+            description:  Registrar nuevo usuario.            
+            request:                                        
+                data:                                         
+                    passwordConfirmed: 
+                        type:  string 
+                        description:  Contraseña confirmada del usuario. 
+                        rules:  requrido                            
+            response:               
+                201:
+                    description: Usuraio creado 
+                    data:
+                        json:
+                            ref: models.UserStoreResponse
+        get:
+            extend: types.UserAuth            
+            description: Obtener informacion del usuario y la compañia.                    
+            response:
+                200:
+                    description: Usuario y su compañia.
+                    data:
+                        json:
+                            ref: models.UserLoginResponse.props.user                    
+               
+    
+        
+    
+                    
+            
+
+types:        
+    ApiRoute:
+        request:
+            headers:
+                X-API-KEY: string
+        response:
+            401:
+                description: "`X-API-KEY` no es valida."
+                   
+    Auth:
+        extend: types.ApiRoute
+        auth: true        
+        request:
+            headers:
+                Authorization: string
+        response:
+            421:
+                description: El token de sesion a expirado.                
+    UserRoute:
+        extend: types.ApiRoute
+        tags: [User, API]
+        request:
+            in: [ body, query ]
+            data:
+                email:
+                    type: string 
+                    rules: Requerido. 
+                    description: Correo del usuario.                    
+                password:
+                    type: string 
+                    rules: Requerido. 
+                    description: Contraseña del usuario.    
+
+    UserAuth:
+        extend: types.Auth        
+        tags: [User, API]   
+        
+    
+        
+
+models:
+    UserStoreResponse:
+        type: object            
+        props:
+            token:
+                type: string 
+                example: akslkdláskldkalskdlkasld´kaslkd´laskdasdkasjdklñjaksjdkasdjkañsjdlkj
+
+    UserLoginResponse:
+        extend: models.UserStoreResponse
+        type: object
+        props:
+            user:
+                type: object 
+                props:
+                    id: 
+                        type: number
+                        example: 21321
+                    email: 
+                        type: string
+                        example: me@example.ocm 
+                    create_at: 
+                        type: string 
+                        example: 20-254-000                       
+            
+
+    InvalidResponse:
+        type: object
+        props:
+            message:
+                type: string            
+            errors:
+                type: object 
+                props:
+                    mail:
+                        type: string
+                        example: required 
+                    password:  
+                        type: string
+                        example: required 
+                    passwordConfirmed:
+                        type: string  
+                        example: required 
+                    
+    Unauthorizate:
+        type: object
+        props:
+            message:
+                type: string
+                example: You are unhotorizate to do this.
+    Data:
+        type: string
+        enum: [XK, YX, ZX] 
+    
+
