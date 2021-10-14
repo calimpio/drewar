@@ -1,4 +1,5 @@
-# Changelog Mecapp
+# Changelog Drewar
+
 Documentation per commit.
 
 - #### Added
@@ -7,6 +8,11 @@ Documentation per commit.
 - #### Deleted
 
 ## Changes:
+
+### [0.1.7] 2021-09-08
+- #### Modifided
+- `readme and changelog`.
+
 
 ### [0.1.6] 2021-09-08
 - #### Added
